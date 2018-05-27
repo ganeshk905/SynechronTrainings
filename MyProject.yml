@@ -1,0 +1,151 @@
+---
+- hosts: localhost
+  vars:
+    sgname: testsg
+    vpcid: vpc-836d56f8
+    region: us-east-1
+    inst_type: t2.micro
+    ami_name: ami-6871a115
+    machine_count: 3
+    my_subnet_id: subnet-996bfed3
+    instance_name: i-0b46c9b47febd9d50
+    group_id: sg-0110f6cd12a7feca1
+    lbsgname: testlbsg
+    mylbname: myLoadBalancer
+#    - openssl_privatekey:
+#        path: /home/ec2-user/environment/my-key.pem
+  tasks:
+    - name: example using security group rule descriptions
+      ec2_group:
+        name: "{{ sgname }}"
+        description: my webserver sg
+        vpc_id: "{{ vpcid }}"
+        region: "{{ region }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 80
+              - 22
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 80 and 22 for ssh
+      register: sg_out
+    - debug:
+        var: sg_out
+
+    - name: create key pair using key_material obtained using 'file' lookup plugin
+      ec2_key:
+        name: my_keypair
+        key_material: "{{ lookup('file', '/home/ec2-user/environment/my-key.pub') }}"
+      register: key
+    - debug:
+        var: key
+    - ec2:
+         region: "{{ region }}"
+         key_name: "{{ key.key.name }}"
+         instance_type: "{{ inst_type }}"
+         image: "{{ ami_name }}"
+         wait: yes
+         group: "{{ sg_out.group_name }}"
+#         count: "{{ machine_count }}"
+         vpc_subnet_id: "{{ my_subnet_id }}"
+         assign_public_ip: yes
+         exact_count: "{{ machine_count }}"
+         count_tag:
+           Name: "{{ instance_name }}"
+         instance_tags:
+           Name: "{{ instance_name }}"
+      register: instance_out
+    - debug:
+        var: instance_out
+    - add_host:
+        name: "{{ item.dns_name }}"
+        group: webserver
+      loop: "{{ instance_out.tagged_instances }}"
+    - name: Wait for ssh port 22 to come up
+      wait_for:
+        host: "{{ item.dns_name }}"
+        port: 22
+        timeout: 3
+        delay: 1
+        state: started
+      loop: "{{ instance_out.tagged_instances }}"
+ 
+     
+    - name: Creating security group for LB
+      ec2_group:
+        name: "{{ lbsgname }}"
+        description: my webserver sg for LB
+        vpc_id: "{{ vpcid }}"
+        region: "{{ region }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 80
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 80
+      register: lb_sg_out
+    - debug:
+        var: lb_sg_out
+      
+    - ec2_elb_lb:
+        name: "{{ mylbname }}"
+        state: present
+        region: "{{ region }}"
+        subnets:
+          - "{{ my_subnet_id }}"
+        security_group_names:
+          - "{{ lbsgname }}"
+        listeners:
+          - protocol: http # options are http, https, ssl, tcp
+            load_balancer_port: 80
+            instance_port: 80
+    - debug:
+        var: testlbsg_out
+          
+    - name: Instance Register
+      ec2_elb:
+        instance_id: "{{ item.id }}"
+        ec2_elbs: "{{ mylbname }}"
+        region: "{{ region }}"
+        state: present
+      loop: "{{ instance_out.tagged_instances }}"
+      
+- hosts: webserver
+  become: True
+  gather_facts: True
+  remote_user: ec2-user
+  vars:
+    ansible_ssh_private_key_file: /home/ec2-user/environment/my-key.pem
+  tasks:
+    - name: Ensure apache at latest version
+      yum:
+        name: httpd
+        state: latest
+    - name: Ensure apache is running
+      service:
+        name: httpd
+        state: running
+    - name: Templating apache
+      template:
+        src: /home/ec2-user/environment/httpd.conf.j2
+        dest: /etc/httpd/conf/httpd.conf
+      notify: restart apache
+    - copy:
+        src: files/index.html
+        dest: /var/www/html/index.html
+ 
+     
+  handlers:
+    - name: restart apache
+      service:
+        name: httpd
+        state: restarted
+        
+            
+         
+    
+        
+
+    
+    
+  

@@ -1,0 +1,39 @@
+---
+- name: Creating security group for LB
+  ec2_group:
+    name: "{{ lbsgname }}"
+    description: my webserver sg for LB
+    vpc_id: "{{ vpcid }}"
+    region: "{{ region }}"
+    rules:
+      - proto: tcp
+        ports:
+          - 80
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on port 80
+  register: lb_sg_out
+- debug:
+    var: lb_sg_out
+  
+- ec2_elb_lb:
+    name: "{{ mylbname }}"
+    state: present
+    region: "{{ region }}"
+    subnets:
+      - "{{ my_subnet_id }}"
+    security_group_names:
+      - "{{ lbsgname }}"
+    listeners:
+      - protocol: http # options are http, https, ssl, tcp
+        load_balancer_port: 80
+        instance_port: 80
+- debug:
+    var: testlbsg_out
+      
+- name: Instance Register
+  ec2_elb:
+    instance_id: "{{ item.id }}"
+    ec2_elbs: "{{ mylbname }}"
+    region: "{{ region }}"
+    state: present
+  loop: "{{ instance_out.tagged_instances }}"

@@ -1,0 +1,13 @@
+---
+# vars file
+sgname: testsg
+vpcid: vpc-836d56f8
+region: us-east-1
+inst_type: t2.micro
+ami_name: ami-6871a115
+machine_count: 3
+my_subnet_id: subnet-996bfed3
+instance_name: i-0b46c9b47febd9d50
+group_id: sg-0110f6cd12a7feca1
+lbsgname: testlbsg
+mylbname: myLoadBalancer

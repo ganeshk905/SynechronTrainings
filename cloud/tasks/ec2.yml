@@ -1,0 +1,32 @@
+---
+- ec2:
+     region: "{{ region }}"
+     key_name: "{{ key.key.name }}"
+     instance_type: "{{ inst_type }}"
+     image: "{{ ami_name }}"
+     wait: yes
+     group: "{{ sg_out.group_name }}"
+#    count: "{{ machine_count }}"
+     vpc_subnet_id: "{{ my_subnet_id }}"
+     assign_public_ip: yes
+     exact_count: "{{ machine_count }}"
+     count_tag:
+       Name: "{{ instance_name }}"
+     instance_tags:
+       Name: "{{ instance_name }}"
+  register: instance_out
+- debug:
+    var: instance_out
+- add_host:
+    name: "{{ item.dns_name }}"
+    group: webserver
+  loop: "{{ instance_out.tagged_instances }}"
+- name: Wait for ssh port 22 to come up
+  wait_for:
+    host: "{{ item.dns_name }}"
+    port: 22
+    timeout: 3
+    delay: 1
+    state: started
+  loop: "{{ instance_out.tagged_instances }}"
+ 

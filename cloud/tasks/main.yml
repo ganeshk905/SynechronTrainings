@@ -1,0 +1,5 @@
+---
+- include: sg.yml
+- include: key.yml
+- include: ec2.yml
+- include: elb.yml

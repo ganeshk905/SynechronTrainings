@@ -1,0 +1,8 @@
+---
+- name: create key pair using key_material obtained using 'file' lookup plugin
+  ec2_key:
+    name: my_keypair
+    key_material: "{{ lookup('file', 'my-key.pub') }}"
+  register: key
+- debug:
+    var: key
