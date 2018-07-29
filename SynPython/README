@@ -1,1 +1,118 @@
 These files are copied from Synechron training which I have not attended.
+Python Programming - Duration: 5 Days
+Prerequisites: Knowledge of any Programming Language
+(It Is mandatory to accomplish the training prerequisite conditions before nominating for the session)
+Introduction: Python is an interpreted general-purpose high-level programming language. Python aims to combine "remarkable power with very clear syntax", and its standard library is large and comprehensive. Its use of indentation for block delimiters is unique among popular programming languages.
+Learning Objectives: At the end of the session, participants will be able to provide useful help in Python projects for programming as well as automation.
+Lab Setup: Software: Python 3.4
+Training Methodology: Heavily hands on
+Material and example python scripts will be given to the participants at the end of the training.
+Day 1
+Introduction to Python
+* Introduction to python programming
+* Working with the python interpreter
+* Numbers and expressions
+* Variables and statements
+* Conditional statements and loop
+* Handling user input
+* Python syntax, style and coding conventions
+Working with Strings
+* An overview of strings in python
+* String operators
+* Built-in string methods
+Lists and Tuples
+* Common sequence operations
+* Manipulation of Lists
+* Manipulation of Tuples
+Working with dictionaries
+* Introduction to dictionaries
+* Creating, assigning, updating dictionaries
+* Dictionary operators, functions and built-in methods
+Functions
+* Creating user-defined functions
+* Passing functions
+* Formal arguments
+* Recursion
+* Variable-length arguments
+* Variable scope
+* Variable-length keyword - arguments
+Day 2
+File handling
+* Reading from files
+* Writing to files
+* Working with CSV files
+* Processing excel files
+* Processing xml files
+Over view of Standard Library
+*os
+* sys
+* math
+* filecmp
+* random
+* datetime
+* time
+* re
+Modules
+* Importing modules and module attributes
+* Creating custom modules
+Day 3
+Errors and exception handling
+* Introduction to exceptions
+* Detecting and handling exceptions
+* Exceptions as Strings and Classes
+* Raising exceptions
+* Creating exceptions
+* Standard exceptions
+OOPS 
+* Introduction to OOP using python
+* Classes and class attributes
+* Inheritance
+Unit Testing
+* Introduction to Unit Testing
+* Doctest
+* Understanding assertions
+* Unittest module
+* Using Pytest
+* Understanding assertions
+* Mocking
+* Test coverage tools
+Day 4
+Regular Expressions
+* Characters
+* Quantifiers
+* Anchors
+* Splitting
+* Replacing
+Selenium
+* Form Handling
+* Locators
+* UI elements
+* Handling mouse keyboard events
+Web Scrapping
+* Selectors
+* scrappy
+REST API acess
+* working with JSON
+* using urllib2
+* accessing urls with urllib2
+* using requests module
+* GET,POST using requests module
+Day 5
+Accessing databases using python
+* Creating tables
+* Inserting records
+* Updating records
+* Deleting records
+* Querring a database
+* Exception Handling
+Web Development using bottle
+* Creating a simple “hello world” web site
+* Creating a simple dynamic web site
+* Passing parameters to a web site
+* Handling forms
+* Building a sample web application.
+Intro to Machine Learning Libraries
+* Numpy
+* Scipy
+* Pandas
+* NLTK
