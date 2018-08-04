@@ -17,5 +17,6 @@ tag -- name a image
 login -- get auth in hub
 rmi -- remove an image
 
-docker run -dit --name my-apache-app -p 9000:80 -v "$PWD":/usr/local/apache2/htdocs/ httpd:2.4
+docker run -dit --name my-apache-app -p 9000:80 -v /home/ec2-user/environment/code:/usr/local/apache2/htdocs/ httpd:2.4
+
 
