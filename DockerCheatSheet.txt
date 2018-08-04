@@ -18,5 +18,41 @@ login -- get auth in hub
 rmi -- remove an image
 
 docker run -dit --name my-apache-app -p 9000:80 -v /home/ec2-user/environment/code:/usr/local/apache2/htdocs/ httpd:2.4
+#Execute command in docker
+docker exec my-apache-app cat /etc/hosts
 
+#Never ssh to docker image. Get shell access using following command
+docker exec -it my-apache-app /bin/bash
+#build image
+docker build -t myapache:1.0 .
+$ docker stop 34b8f68f831e 849df224b400 fde2aeb25965
+docker rm 34b8f68f831e 849df224b400 fde2aeb25965 e22e4fdc592d
+---------------
+ec2-user:~/environment/testApp/frontEnd (master) $ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+<none>              <none>              05fccfb41d80        13 minutes ago      319MB
+myapache            1.0                 1a42f4ea439b        13 minutes ago      319MB
+httpd               2.4                 11426a19f1a2        3 days ago          178MB
+centos              7                   49f7960eb7e4        2 months ago        200MB
+lambci/lambda       python3.6           e4011bcfeb1e        2 months ago        1.1GB
+lambci/lambda       python2.7           02d43835d244        2 months ago        973MB
+lambci/lambda       nodejs6.10          533d8c3454e0        2 months ago        1.02GB
+lambci/lambda       nodejs4.3           6a1183f209ed        2 months ago        968MB
+ec2-user:~/environment/testApp/frontEnd (master) $ docker rmi 05fccfb41d80 1a42f4ea439b
+Deleted: sha256:05fccfb41d800105d55bd3e07a236eaf0f0c19c85165fab7adf927db0063ee5d
+Untagged: myapache:1.0
+Deleted: sha256:1a42f4ea439bc00172ab2510bc14e2e55609a5b6d93c1bb4616c646e29e08a24
+Deleted: sha256:31c85cea80d99d9ced0728bdeeeefcb77985a534107fbad51ead9857bf9e6005
+Deleted: sha256:d2cb01ce45dc338ded67da10a391b1def8594fea3d0cb2c9553433b39dea0d41
+Deleted: sha256:ff27379a3ee405eacc2cbba915c06d9ab922bc68f115814d0cbc09894e748515
+Deleted: sha256:94403e17c96a5ee546f8875c69e15a4b74d23bb25f0e4b3cfac6e4c1ba09d8ec
+Deleted: sha256:bf716d277fe9183daacbab9a10a2aa33e2b81ef120e695255ea2dc131d73d7eb
+Deleted: sha256:5b83fc5947bdd9a75d90686be54ed677d6781b7cd078e0c257175dfcd4173f32
+---------------
+Assignment
+
+Install Ubantu
+install ngix, php, php-gd, php-mysql
+copy code <Doc_root_of_ngix>
+start ngix in foreground
 
