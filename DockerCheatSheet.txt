@@ -1,0 +1,21 @@
+Container Commands
+
+ps    Show running command
+ps -a   show running and stopped
+run  create a container
+stop <cid_name> stop container
+start <cid_name> start container
+restart <cid_name> stop container
+exec  <cid_name> run command inside container
+inspect <cid_name> complete details about container
+rm <cid_name> remove container
+images -- list all images
+build -- buld new image
+pull -- pull image from hub to local
+push -- push image from local to hub
+tag -- name a image
+login -- get auth in hub
+rmi -- remove an image
+
+docker run -dit --name my-apache-app -p 9000:80 -v "$PWD":/usr/local/apache2/htdocs/ httpd:2.4
+
