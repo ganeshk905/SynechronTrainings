@@ -18,6 +18,10 @@ login -- get auth in hub
 rmi -- remove an image
 
 docker run -dit --name my-apache-app -p 9000:80 -v /home/ec2-user/environment/code:/usr/local/apache2/htdocs/ httpd:2.4
+docker run -d --name my-apache-app -p 9000:80 httpd:2.4
+docker run -d(Deamonise) --name <image-name> -p <localport>:<remote_port> :<tag>
+
+
 #Execute command in docker
 docker exec my-apache-app cat /etc/hosts
 
@@ -56,3 +60,127 @@ install ngix, php, php-gd, php-mysql
 copy code <Doc_root_of_ngix>
 start ngix in foreground
 
+https://www.novixys.com/blog/nginx-inside-docker-ubuntu-howto/
+--------------------------------
+
+docker run -d --name myubuntu -p 9002:80 myubuntu:1.0
+ec2-user:~/environment/ubuntuApp/frontEnd (master) $ docker run -d --name myubuntu -p 9002:80 myubuntu:1.0
+ed0f687ec6f26c0b8e60fca8a338f28ca9f04cc3f2d28ab32b859a735ff98eaf
+
+Tag before uploading image
+docker tag myapache:1.0 mohanraz81:myapache:1.0
+docker login
+docker push <Remote_image>
+ec2-user:~/environment/ubuntuApp/frontEnd (master) $ docker push sadashivkulthe/myapache
+The push refers to repository [docker.io/sadashivkulthe/myapache]
+
+-----------------------------------------------------------------------------
+Kubernets
+
+Cluser
+  |
+  |__Nodes
+       | 
+	   |__Namespace (Namespace can be assigned with Quotas)
+	   |____________________Above part manages by CASS team_______________________
+	   |
+	   |__Deployment (have versions)
+	   |__Replication
+	   |__POD (POD means containers with network and storage added by kubernetes)
+	   --------------------------------------------------------------------------
+	   
+freenom.com --> to create free domain name registration
+
+#Name servers at freenom.com
+ns-157.awsdns-19.com.
+ns-1303.awsdns-34.org.
+ns-756.awsdns-30.net.
+ns-1661.awsdns-15.co.uk.
+
+#Create s3 bucket to store object at central place (avoid fear of loosing it when cloud9 down.)
+# bucket name should be unique across aws 
+aws s3api create-bucket --bucket kube-mohanraz-ml-state-store  --region us-east-1
+{
+	 "Location": "/kube-mohanraz-ml-state-store"
+}
+
+aws s3api create-bucket --bucket kube-srujdesign-ml-state-store  --region us-east-1
+{
+	 "Location": "/kube-mohanraz-ml-state-store"
+}
+
+ec2-user:~/environment (master) $ aws s3 ls
+2018-08-05 09:21:40 kube-srujdesign-ml-state-store
+
+aws s3api put-bucket-versioning --bucket kube-srujdesign-ml-state-store --versioning-configuration Status=Enabled
+
+ssh-keygen
+kops create cluster \
+    --zones=us-east-1a,us-east-1b,us-east-1c \
+    --master-zones=us-east-1a,us-east-1b,us-east-1c \
+    --node-count=4 \
+    --node-size=t2.small \
+    --master-size=t2.small \
+    --name ${NAME}
+	
+kops edit cluster ${NAME}
+
+kops update cluster ${NAME} --yes
+
+ * validate cluster: kops validate cluster
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to the master: ssh -i ~/.ssh/id_rsa admin@api.kubecluster.srujdesign.ml
+ kubectl apply
+ kubectl get
+ kubectl describe
+ kubectl delete
+ kubectl get namespaces
+ kubectl get pod --namespace=kube-system
+ kubectl config set-context $(kubectl config current-context) --namespace=test
+ kubectl config view | grep namespace:
+ 
+ kubectl apply -f web.yml
+ 
+ kubectl describe service frontend
+ kubectl get services
+ 
+ =====================================================
+ Jenkins
+ On Cloud9
+ 
+ sudo usermod -a -G docker jenkins
+ sudo service jenkins restart
+ sudo yum -y install ansible
+ ec2-user:~/environment/Kubernetes (master) $ kubectl delete service frontend
+service "frontend" deleted
+ec2-user:~/environment/Kubernetes (master) $ kubectl get deployments
+NAME                DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+apache-deployment   2         2         2            2           1h
+ec2-user:~/environment/Kubernetes (master) $ kubectl delete deployment apache-deployment
+deployment "apache-deployment" deleted
+ec2-user:~/environment/Kubernetes (master) $ sudo pip install boto boto3 botocore
+-------------------------------------
+Things to delete
+
+kops delete cluster $NAME --yes
+-DB
+RDS-> instances -> Delete Instance (No snapshot)
+RDS -> subnet group -> delete
+
+AWS EC2 -
+1. all instances (except cloud9)
+2. AMI
+3. snapshot
+4. Volumes
+5. ASG
+6. Launch Configuration
+7. Load Balancer
+8. Route53
+9. VPC
+Access Key
+----------------------------------------------
+Trainer details
+Name: Mohan
+Mob: 9611046506
+Email: mohan@y2ytech.com
+  
